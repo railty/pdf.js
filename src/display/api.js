@@ -3126,6 +3126,10 @@ class WorkerTransport {
 class PDFObjects {
   #objs = Object.create(null);
 
+  get all() {
+    return this.#objs;
+  }
+
   /**
    * Ensures there is an object defined for `objId`.
    *
@@ -3190,6 +3194,7 @@ class PDFObjects {
    * @param {any} [data]
    */
   resolve(objId, data = null) {
+    //console.log("resolve", objId);
     const obj = this.#ensureObj(objId);
     obj.data = data;
     obj.capability.resolve();
