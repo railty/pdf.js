@@ -992,8 +992,6 @@ class CanvasGraphics {
   }
 
   getObject(data, fallback = null) {
-    console.log("getObjects");
-
     if (typeof data === "string") {
       return data.startsWith("g_")
         ? this.commonObjs.get(data)
@@ -1055,6 +1053,7 @@ class CanvasGraphics {
     continueCallback,
     stepper
   ) {
+
     const argsArray = operatorList.argsArray;
     const fnArray = operatorList.fnArray;
     let i = executionStartIdx || 0;
@@ -2197,11 +2196,6 @@ class CanvasGraphics {
       let restoreNeeded = false;
       const spacing = (glyph.isSpace ? wordSpacing : 0) + charSpacing;
       let character = glyph.fontChar;
-
-      if (character.charCodeAt(0) == 57428) {
-        console.log("replace T");
-        character = String.fromCharCode(57458);
-      }
 
       const accent = glyph.accent;
       let scaledX, scaledY;

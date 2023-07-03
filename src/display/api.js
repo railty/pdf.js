@@ -1424,8 +1424,10 @@ class PDFPageProxy {
     annotationCanvasMap = null,
     pageColors = null,
     printAnnotationStorage = null,
+    opFilter = null,
   }) {
     this._stats?.time("Overall");
+    this.opFilter = opFilter;
 
     const intentArgs = this._transport.getRenderingIntent(
       intent,
@@ -1537,6 +1539,7 @@ class PDFPageProxy {
           transparency,
           optionalContentConfig,
         });
+
         internalRenderTask.operatorListChanged();
       })
       .catch(complete);
@@ -1781,6 +1784,9 @@ class PDFPageProxy {
    * @private
    */
   _renderPageChunk(operatorListChunk, intentState) {
+
+    if (this.opFilter) this.opFilter(operatorListChunk);
+
     // Add the new chunk to the current operator list.
     for (let i = 0, ii = operatorListChunk.length; i < ii; i++) {
       intentState.operatorList.fnArray.push(operatorListChunk.fnArray[i]);
@@ -1807,6 +1813,8 @@ class PDFPageProxy {
     cacheKey,
     annotationStorageSerializable,
   }) {
+    console.log("calling _pumpOperatorList", renderingIntent, cacheKey);
+
     if (typeof PDFJSDev === "undefined" || PDFJSDev.test("TESTING")) {
       assert(
         Number.isInteger(renderingIntent) && renderingIntent > 0,
@@ -3386,7 +3394,6 @@ class InternalRenderTask {
       return;
     }
     this.stepper?.updateOperatorList(this.operatorList);
-
     if (this.running) {
       return;
     }
@@ -3419,14 +3426,17 @@ class InternalRenderTask {
     if (this.cancelled) {
       return;
     }
+
     this.operatorListIdx = this.gfx.executeOperatorList(
       this.operatorList,
       this.operatorListIdx,
       this._continueBound,
       this.stepper
     );
+    
     if (this.operatorListIdx === this.operatorList.argsArray.length) {
       this.running = false;
+      
       if (this.operatorList.lastChunk) {
         this.gfx.endDrawing(this.pageColors);
         if (this._canvas) {

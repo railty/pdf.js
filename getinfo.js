@@ -29,11 +29,19 @@ const getInfo = async ()=>{
     console.log();
 
     const  content = await page.getTextContent()
+
+    console.log("------------------")
+    console.log(content.items[0])
+    console.log(content.items[0].transform)
+    console.log("==================")
+
+
     const strings = content.items.map(function (item) {
       return item.str;
     });
-    console.log("## Text Content");
-    console.log(strings.join(" "));
+    
+    //console.log("## Text Content");
+    //console.log(strings.join(" "));
     // Release page resources.
     page.cleanup();
   }

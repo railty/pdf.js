@@ -703,6 +703,7 @@ class WorkerMessageHandler {
           })
           .then(
             function (operatorListInfo) {
+              //this is another place I can place the hook
               finishWorkerTask(task);
 
               if (start) {

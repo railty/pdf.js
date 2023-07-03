@@ -78,9 +78,9 @@ const loadingTask = pdfjsLib.getDocument({
     console.log("objs = ", Object.keys(objs));
     console.log("commonObjs = ", Object.keys(commonObjs));
     */
-    const opList = await page.getOperatorList();
+    //const opList = await page.getOperatorList();
     //console.log("opList = ", opList);
-
+/*
     for (let i = 0; i < opList.fnArray.length; i++){
       //console.log("opList = ", opNames[opList.fnArray[i]]);
       if (opNames[opList.fnArray[i]] == "showText"){
@@ -102,7 +102,7 @@ const loadingTask = pdfjsLib.getDocument({
     //console.log("opList.arg = ", opList.argsArray[4]);
     const T = opList.argsArray[4][0][0];
     const r = opList.argsArray[4][0][2];
-
+*/
     /*
     T.originalCharCode = r.originalCharCode;
     T.fontChar = r.fontChar;
@@ -126,6 +126,24 @@ const loadingTask = pdfjsLib.getDocument({
     const renderContext = {
       canvasContext: canvasAndContext.context,
       viewport,
+      opFilter:(opList) => {
+        for (let i = 0; i < opList.fnArray.length; i++){
+          // console.log("opList = ", opNames[opList.fnArray[i]]);
+          if (opNames[opList.fnArray[i]] == "showText"){
+            for (let args of opList.argsArray[i]){
+              for (let k=0; k<opList.argsArray[i].length; k++){
+                for (let n=0; n<opList.argsArray[i][k].length; n++){
+                  const arg = opList.argsArray[i][k][n];
+                  if (arg.fontChar){
+                    console.log("arg = ", arg.fontChar, arg.unicode, arg.fontChar.charCodeAt(0));
+                    if (arg.fontChar.charCodeAt(0) == 57428) arg.fontChar = String.fromCharCode(57458);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     };
 
     const renderTask = page.render(renderContext);
