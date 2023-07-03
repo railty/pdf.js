@@ -1,0 +1,1 @@
+../../../build/generic/build/pdf.worker.js

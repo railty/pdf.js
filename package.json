@@ -4,6 +4,7 @@
     "@babel/core": "^7.22.5",
     "@babel/plugin-transform-modules-commonjs": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
+    "@babel/preset-react": "^7.22.5",
     "@babel/runtime": "^7.22.5",
     "@javascript-obfuscator/escodegen": "2.3.0",
     "acorn": "^8.9.0",
@@ -31,6 +32,7 @@
     "gulp-rename": "^2.0.0",
     "gulp-replace": "^1.1.4",
     "gulp-zip": "^5.1.0",
+    "html-webpack-plugin": "^5.5.3",
     "jasmine": "^5.0.2",
     "jsdoc": "^4.0.2",
     "jstransformer-markdown-it": "^3.0.0",
@@ -54,11 +56,13 @@
     "vinyl": "^3.0.0",
     "vinyl-fs": "^3.0.3",
     "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
     "webpack-stream": "^7.0.0",
     "wintersmith": "^2.5.0",
     "yargs": "^17.7.2"
   },
   "scripts": {
+    "webpack": "webpack --config webpack.config.js --mode=development --watch",
     "postinstall": "cross-env PUPPETEER_PRODUCT=firefox node node_modules/puppeteer/install.js"
   },
   "repository": {
@@ -68,5 +72,13 @@
   "engines": {
     "node": ">=18"
   },
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "css-loader": "^6.8.1",
+    "mini-css-extract-plugin": "^2.7.6",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "style-loader": "^3.3.3"
+  }
 }

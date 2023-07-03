@@ -305,7 +305,8 @@ const defaultOptions = {
 if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
   defaultOptions.defaultUrl = {
     /** @type {string} */
-    value: "compressed.tracemonkey-pldi-09.pdf",
+    // value: "compressed.tracemonkey-pldi-09.pdf",
+    value: "withImage.pdf",
     kind: OptionKind.VIEWER,
   };
   defaultOptions.disablePreferences = {
