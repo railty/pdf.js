@@ -1053,7 +1053,6 @@ class CanvasGraphics {
     continueCallback,
     stepper
   ) {
-
     const argsArray = operatorList.argsArray;
     const fnArray = operatorList.fnArray;
     let i = executionStartIdx || 0;
@@ -1074,6 +1073,11 @@ class CanvasGraphics {
     const objs = this.objs;
     let fnId;
 
+    const opNames = {};
+    for (const k of Object.keys(OPS)) {
+      opNames[parseInt(OPS[k])] = k;
+    }
+
     while (true) {
       if (stepper !== undefined && i === stepper.nextBreakPoint) {
         stepper.breakIt(i, continueCallback);
@@ -1082,10 +1086,7 @@ class CanvasGraphics {
 
       fnId = fnArray[i];
 
-      if (fnId !== OPS.dependency) {
-        // eslint-disable-next-line prefer-spread
-        this[fnId].apply(this, argsArray[i]);
-      } else {
+      if (fnId == OPS.dependency) {
         for (const depObjId of argsArray[i]) {
           const objsPool = depObjId.startsWith("g_") ? commonObjs : objs;
 
@@ -1096,6 +1097,42 @@ class CanvasGraphics {
             return i;
           }
         }
+      } else if ([OPS.paintImageXObject].includes(fnId)) {
+        console.log("paintImage");
+      } else if (
+        [
+          //      'save',
+          //      'restore',
+          //      'setRenderingIntent',
+          //      'setFont',
+          //      'moveText',
+          //      'showText',
+          //      'beginText',
+          //      'endText',
+          //      'setTextMatrix',
+          //      'setStrokeRGBColor',
+          //       'transform',
+          //      'setFillRGBColor',
+          //      'setDash',
+          //      'setLineCap',
+          //      'setLineJoin',
+          //      'setLineWidth',
+          //      'constructPath',
+          //      'setFlatness',
+          //      'clip',
+          //      'endPath',
+          //      'eoFill',
+          //      'eoClip',
+          "stroke",
+          //      'fill',
+          //      'shadingFill',
+          //      'setFillColorN',
+        ].includes(opNames[fnId])
+      ) {
+        console.log("fnId = ", opNames[fnId]);
+      } else {
+        // eslint-disable-next-line prefer-spread
+        this[fnId].apply(this, argsArray[i]);
       }
 
       i++;
@@ -2095,6 +2132,10 @@ class CanvasGraphics {
   }
 
   showText(glyphs) {
+    const us = glyphs.map(g => g.unicode);
+    const str = us.join("");
+    console.log("showText:", str);
+
     const current = this.current;
     const font = current.font;
     if (font.isType3Font) {
@@ -2239,6 +2280,9 @@ class CanvasGraphics {
         if (simpleFillText && !accent) {
           // common case
           ctx.fillText(character, scaledX, scaledY);
+          console.log("fillText:", glyph.unicode, scaledX, scaledY);
+
+          //ctx.fillRect(scaledX, scaledY, fontSize, fontSize);
         } else {
           this.paintChar(character, scaledX, scaledY, patternTransform);
           if (accent) {
@@ -2263,6 +2307,8 @@ class CanvasGraphics {
         charWidth = width * widthAdvanceScale + spacing * fontDirection;
       }
       x += charWidth;
+      console.log("charWidth=", charWidth);
+      console.log("charHeight=", fontSize);
 
       if (restoreNeeded) {
         ctx.restore();

@@ -2520,6 +2520,10 @@ class PartialEvaluator {
         transform: textChunk.transform,
         fontName: textChunk.fontName,
         hasEOL: textChunk.hasEOL,
+
+        aaa: textChunk.aaa,
+        glyph: textChunk.glyph,
+        operations: textChunk.operations,
       };
     }
 
@@ -2767,7 +2771,7 @@ class PartialEvaluator {
       return true;
     }
 
-    function buildTextContentItem({ chars, extraSpacing }) {
+    function buildTextContentItem({ chars, extraSpacing, operation }) {
       const font = textState.font;
       if (!chars) {
         // Just move according to the space we have.
@@ -2841,6 +2845,20 @@ class PartialEvaluator {
         // Must be called after compareWithLastPosition because
         // the textContentItem could have been flushed.
         const textChunk = ensureTextContentItem();
+
+        if (textChunk.aaa) {
+          textChunk.aaa += 1;
+        } else {
+          textChunk.aaa = 123;
+        }
+
+        textChunk.glyph = glyph;
+        if (textChunk.operations){
+          textChunk.operations.push(operation);
+        } else {
+          textChunk.operations = [operation];
+        }
+
         if (category.isZeroWidthDiacritic) {
           scaledDim = 0;
         }
@@ -3116,6 +3134,7 @@ class PartialEvaluator {
             buildTextContentItem({
               chars: args[0],
               extraSpacing: 0,
+              operation,
             });
             break;
           case OPS.nextLineShowText:

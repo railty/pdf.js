@@ -1645,6 +1645,7 @@ class PDFPageProxy {
         return XfaText.textContent(xfa);
       });
     }
+
     const readableStream = this.streamTextContent(params);
 
     return new Promise(function (resolve, reject) {

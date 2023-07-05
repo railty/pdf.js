@@ -28,11 +28,12 @@ var pdfData = atob(
 const App = () => {
   const refCanvas = useRef();
   const [ops, setOps] = useState([]);
+  const [page, setPage] = useState();
 
   let pdf = null
-  let page = null
 
   const getText = async()=>{
+    debugger;
     const texts = await page.getTextContent();
     console.log("texts = ", texts);
   }
@@ -59,8 +60,8 @@ const App = () => {
         op.args = (
           <table>
             <tbody>
-              {op.args[0].map((arg)=>(
-                <tr>
+              {op.args[0].map((arg, i)=>(
+                <tr key={i}>
                   <td>{JSON.stringify(arg)}</td>
                 </tr>
               ))}
@@ -79,7 +80,9 @@ const App = () => {
     pdf = await loadingTask.promise;
     console.log(pdf);
 
-    page = await pdf.getPage(1);
+    const page = await pdf.getPage(1);
+    setPage(page);
+
     var scale = 1.5;
     var viewport = page.getViewport({ scale: scale, });
     var outputScale = window.devicePixelRatio || 1;
