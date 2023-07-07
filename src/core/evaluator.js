@@ -1652,6 +1652,8 @@ class PartialEvaluator {
     resources ||= Dict.empty;
     initialState ||= new EvalState();
 
+    debugger;
+
     if (!operatorList) {
       throw new Error('getOperatorList: missing "operatorList" parameter');
     }
@@ -2216,7 +2218,7 @@ class PartialEvaluator {
               }
             }
         }
-        operatorList.addOp(fn, args);
+        operatorList.addOp(fn, args, operation.pos);
       }
       if (stop) {
         next(deferred);
@@ -2522,8 +2524,8 @@ class PartialEvaluator {
         hasEOL: textChunk.hasEOL,
 
         aaa: textChunk.aaa,
-        glyph: textChunk.glyph,
-        operations: textChunk.operations,
+        glyphs: textChunk.glyphs,
+        op: textChunk.op,
       };
     }
 
@@ -2849,14 +2851,13 @@ class PartialEvaluator {
         if (textChunk.aaa) {
           textChunk.aaa += 1;
         } else {
-          textChunk.aaa = 123;
+          textChunk.aaa = 0;
         }
 
-        textChunk.glyph = glyph;
-        if (textChunk.operations){
-          textChunk.operations.push(operation);
+        if (textChunk.glyphs){
+          textChunk.glyphs.push(glyph);
         } else {
-          textChunk.operations = [operation];
+          textChunk.glyphs = [glyph];
         }
 
         if (category.isZeroWidthDiacritic) {
@@ -2900,6 +2901,8 @@ class PartialEvaluator {
           }
         }
       }
+
+      textContentItem.op = JSON.parse(JSON.stringify(operation));
     }
 
     function appendEOL() {
@@ -2969,6 +2972,9 @@ class PartialEvaluator {
       textContent.items.push(runBidiTransform(textContentItem));
       textContentItem.initialized = false;
       textContentItem.str.length = 0;
+
+      textContentItem.glyphs = [];
+      textContentItem.op = null;
     }
 
     function enqueueChunk(batch = false) {
@@ -5000,6 +5006,8 @@ class EvaluatorPreprocessor {
 
         operation.fn = fn;
         operation.args = args;
+        operation.pos = this.parser.lexer.stream.pos;
+
         return true;
       }
       if (obj === EOF) {
