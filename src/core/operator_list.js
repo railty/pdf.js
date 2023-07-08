@@ -676,7 +676,7 @@ class OperatorList {
       this.dependencies.add(dependency);
     }
     for (let i = 0, ii = opList.length; i < ii; i++) {
-      this.addOp(opList.fnArray[i], opList.argsArray[i]);
+      this.addOp(opList.fnArray[i], opList.argsArray[i], opList.posArray[i]);
     }
   }
 

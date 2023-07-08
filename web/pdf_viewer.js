@@ -680,6 +680,8 @@ class PDFViewer {
       // By default getTextContent pass disableNormalization equals to false
       // which is fine because we want a normalized string.
       const { items } = await page.getTextContent();
+      const oplist = await page.getOperatorList();
+
       for (const item of items) {
         if (item.str) {
           buffer.push(item.str);

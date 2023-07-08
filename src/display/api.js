@@ -1590,6 +1590,7 @@ class PDFPageProxy {
       intentState.operatorList = {
         fnArray: [],
         argsArray: [],
+        posArrag: [],
         lastChunk: false,
         separateAnnots: null,
       };
@@ -1792,7 +1793,7 @@ class PDFPageProxy {
     for (let i = 0, ii = operatorListChunk.length; i < ii; i++) {
       intentState.operatorList.fnArray.push(operatorListChunk.fnArray[i]);
       intentState.operatorList.argsArray.push(operatorListChunk.argsArray[i]);
-      intentState.operatorList.posArray.push(operatorListChunk.posArray[i]);
+      //intentState.operatorList.posArray.push(operatorListChunk.posArray[i]);
     }
     intentState.operatorList.lastChunk = operatorListChunk.lastChunk;
     intentState.operatorList.separateAnnots = operatorListChunk.separateAnnots;
