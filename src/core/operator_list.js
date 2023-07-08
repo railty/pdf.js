@@ -684,13 +684,14 @@ class OperatorList {
     return {
       fnArray: this.fnArray,
       argsArray: this.argsArray,
+      posArray: this.posArray,
       length: this.length,
     };
   }
 
   get _transfers() {
     const transfers = [];
-    const { fnArray, argsArray, length } = this;
+    const { fnArray, argsArray, posArray, length } = this;
     for (let i = 0; i < length; i++) {
       switch (fnArray[i]) {
         case OPS.paintInlineImageXObject:
@@ -715,6 +716,7 @@ class OperatorList {
       {
         fnArray: this.fnArray,
         argsArray: this.argsArray,
+        posArray: this.posArray,
         lastChunk,
         separateAnnots,
         length,
@@ -726,6 +728,7 @@ class OperatorList {
     this.dependencies.clear();
     this.fnArray.length = 0;
     this.argsArray.length = 0;
+    this.posArray.length = 0;
     this.weight = 0;
     this.optimizer.reset();
   }

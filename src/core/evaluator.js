@@ -1652,8 +1652,6 @@ class PartialEvaluator {
     resources ||= Dict.empty;
     initialState ||= new EvalState();
 
-    debugger;
-
     if (!operatorList) {
       throw new Error('getOperatorList: missing "operatorList" parameter');
     }

@@ -33,7 +33,6 @@ const App = () => {
   let pdf = null
 
   const getText = async()=>{
-    debugger;
     const texts = await page.getTextContent();
     console.log("texts = ", texts);
   }
