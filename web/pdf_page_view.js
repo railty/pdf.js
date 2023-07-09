@@ -49,6 +49,7 @@ import { TextAccessibilityManager } from "./text_accessibility.js";
 import { TextHighlighter } from "./text_highlighter.js";
 import { TextLayerBuilder } from "./text_layer_builder.js";
 import { XfaLayerBuilder } from "./xfa_layer_builder.js";
+import { OPS } from "../src/shared/util.js";
 
 /**
  * @typedef {Object} PDFPageViewOptions
@@ -966,6 +967,19 @@ class PDFPageView {
       optionalContentConfigPromise: this._optionalContentConfigPromise,
       annotationCanvasMap: this._annotationCanvasMap,
       pageColors,
+
+      opFilter: (opList) => {
+        console.log(opList);
+
+        for (let i=0; i < opList.length; i++) {
+          if (opList.fnArray[i] == OPS.showText){
+            //console.log(opList.argsArray[i][0]);
+            //console.log(opList);
+          }
+        }
+        
+      }
+
     };
     const renderTask = (this.renderTask = this.pdfPage.render(renderContext));
     renderTask.onContinue = renderContinueCallback;
