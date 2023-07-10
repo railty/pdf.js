@@ -959,6 +959,11 @@ class PDFPageView {
     const transform = outputScale.scaled
       ? [outputScale.sx, 0, 0, outputScale.sy, 0, 0]
       : null;
+
+    const texts = await this.pdfPage.getTextContent();
+    const pos = texts.items[0].op.pos;
+    //const ops = await this.pdfPage.getOperatorList();
+
     const renderContext = {
       canvasContext: ctx,
       transform,
@@ -969,15 +974,13 @@ class PDFPageView {
       pageColors,
 
       opFilter: (opList) => {
-        console.log(opList);
-
-        for (let i=0; i < opList.length; i++) {
-          if (opList.fnArray[i] == OPS.showText){
-            //console.log(opList.argsArray[i][0]);
-            //console.log(opList);
+        for (let i=0; i < opList.posArray.length; i++) {
+          if (opList.posArray[i] == pos){
+            const fn = opList.fnArray[i];
+            const args = opList.argsArray[i];
+            console.log(i);
           }
         }
-        
       }
 
     };

@@ -1123,7 +1123,7 @@ class CanvasGraphics {
           //      'endPath',
           //      'eoFill',
           //      'eoClip',
-          "stroke",
+          //      "stroke",
           //      'fill',
           //      'shadingFill',
           //      'setFillColorN',

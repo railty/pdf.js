@@ -1669,6 +1669,8 @@ class PartialEvaluator {
     const patterns = resources.get("Pattern") || Dict.empty;
     const stateManager = new StateManager(initialState);
     const preprocessor = new EvaluatorPreprocessor(stream, xref, stateManager);
+    console.log("getOperatorList", stream, xref, stateManager);
+
     const timeSlotManager = new TimeSlotManager();
 
     function closePendingRestoreOPS(argument) {
@@ -2376,6 +2378,7 @@ class PartialEvaluator {
     const emptyGStateCache = new LocalGStateCache();
 
     const preprocessor = new EvaluatorPreprocessor(stream, xref, stateManager);
+    console.log("getTextContent", stream, xref, stateManager);
 
     let textState;
 
@@ -3007,6 +3010,7 @@ class PartialEvaluator {
       const operation = {};
       let stop,
         args = [];
+      let i = 0;
       while (!(stop = timeSlotManager.check())) {
         // The arguments parsed by read() are not used beyond this loop, so
         // we can reuse the same array on every iteration, thus avoiding
@@ -3016,12 +3020,16 @@ class PartialEvaluator {
         if (!preprocessor.read(operation)) {
           break;
         }
+        i++;
 
         const previousState = textState;
         textState = stateManager.state;
         const fn = operation.fn;
         args = operation.args;
 
+        if (fn==42){
+          i = i+1;
+        }
         switch (fn | 0) {
           case OPS.setFont:
             // Optimization to ignore multiple identical Tf commands.
